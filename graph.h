@@ -440,6 +440,7 @@ graph::graph(ifstream &fin)
    // Add nodes.
    for (int i = 0; i < n; i++)
       addNode();
+   cout << numNodes();
 
    NumEdges = 0;
 
@@ -507,7 +508,7 @@ int graph::addNode(NodeWeight w)
 // matrix.  Return the index of the new node.
 {
    node n;
-   n.setNode(numNodes(),w);
+   n.setNode(numNodes(),w,false,false);
    nodes.push_back(n);
 
    edges.resize(numNodes(),numNodes());
