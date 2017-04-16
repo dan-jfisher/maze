@@ -53,6 +53,7 @@ maze::maze(ifstream &fin)
    char x;
 
    value.resize(rows,cols);
+   visitedNodes.resize(rows,cols);
    for (int i = 0; i <= rows-1; i++)
 	  for (int j = 0; j <= cols-1; j++)
 	  {
