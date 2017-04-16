@@ -28,6 +28,7 @@ class maze
 	  int cols; // number of columns in the maze
 
 	  matrix<bool> value;
+	  vector<string> directions;
       matrix<bool> visitedNodes;
 	  matrix<int> map;      // Mapping from maze (i,j) values to node index values
 };
@@ -115,41 +116,49 @@ bool maze::isLegal(int i, int j)
 void maze::mapMazeToGraph(graph &g)
 // Create a graph g that represents the legal moves in the maze m.
 {
+
 }
 
 bool maze::findPathRecursive(int i, int j, int desti, int destj) {
-    stack<string> directions;
     visitedNodes[i][j] = true;
     if(i == desti && j == destj) {
-        /*while (!directions.empty()) {
-            cout << directions.top();
-            directions.pop();
-        }*/
+        while (!directions.empty()) {
+			cout << directions.front();
+			directions.erase(directions.begin());
+        }
+		cout << "Found" << endl;
         return true;
     }
     //check all four possible directions
     if(isLegal(i+1,j) && !visitedNodes[i+1][j]) {
-        directions.push("down ");
+        directions.push_back("down ");
         if(findPathRecursive(i + 1, j, desti, destj))
             return true;
+		else if (!directions.empty())
+			directions.pop_back();
     }
     if(isLegal(i,j+1) && !visitedNodes[i][j+1]) {
-        directions.push("right ");
+        directions.push_back("right ");
         if(findPathRecursive(i, j+1, desti, destj))
             return true;
+		else if (!directions.empty())
+			directions.pop_back();
     }
     if(isLegal(i-1,j) && !visitedNodes[i-1][j]) {
-        directions.push("up");
+        directions.push_back("up");
         if(findPathRecursive(i - 1, j, desti, destj))
             return true;
+		else if (!directions.empty())
+			directions.pop_back();
     }
     if(isLegal(i,j-1) && !visitedNodes[i][j-1]) {
-        directions.push("left");
+        directions.push_back("left");
         if(findPathRecursive(i, j-1, desti, destj))
             return true;
+		else if(!directions.empty())
+			directions.pop_back();
     }
     //no path could be found from this node to the destination
-    //directions.pop();
     return false;
 }
 
@@ -160,7 +169,7 @@ int main()
    ifstream fin;
 
    // Read the maze from the file.
-   string fileName = "Maze 1.txt";
+   string fileName = "maze.txt";
 
    fin.open(fileName.c_str());
    if (!fin)
@@ -184,4 +193,5 @@ int main()
    {
 	  cout << ex.what() << endl; exit(1);
    }
+   system("pause");
 }
