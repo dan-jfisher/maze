@@ -116,17 +116,54 @@ bool maze::isLegal(int i, int j)
 void maze::mapMazeToGraph(graph &g)
 // Create a graph g that represents the legal moves in the maze m.
 {
+    int counter = 0;
+    for(int i = 0; i < rows; i++){     //map all nodes
+        for(int j = 0; j < cols; j++){
+            if(isLegal(i,j)){
+                node n;
+                g.addNode(n);
+                setMap(i,j, counter);
+                counter++;
+            }
+        }
+    }
 
+    for(int i = 0; i < rows; i++) {   //add all edges
+        for (int j = 0; j < cols; j++) {
+            if(isLegal(i,j)){
+                if(isLegal(i+1,j)){
+                    g.addEdge(getMap(i,j), getMap(i+1,j));
+                }
+                if(isLegal(i,j+1)){
+                    g.addEdge(getMap(i,j), getMap(i+1,j));
+                }
+                if(isLegal(i-1,j)){
+                    g.addEdge(getMap(i,j), getMap(i+1,j));
+                }
+                if(isLegal(i,j-1)){
+                    g.addEdge(getMap(i,j), getMap(i+1,j));
+                }
+            }
+        }
+
+    }
 }
 
 bool maze::findPathRecursive(int i, int j, int desti, int destj) {
     visitedNodes[i][j] = true;
-    if(i == desti && j == destj) {
+    if(i == desti && j == destj) {  //found bottom right corner
         while (!directions.empty()) {
 			cout << directions.front();
-			directions.erase(directions.begin());
+			directions.erase(directions.begin());  //print directions
         }
 		cout << "Found" << endl;
+
+        for(int i = 0; i < rows; i++){      //clear visitedNodes matrix
+            for(int j = 0; j < cols; j++){
+                visitedNodes[i][j] = false;
+            }
+        }
+
         return true;
     }
     //check all four possible directions
@@ -169,7 +206,7 @@ int main()
    ifstream fin;
 
    // Read the maze from the file.
-   string fileName = "maze.txt";
+   string fileName = "Maze 1.txt";
 
    fin.open(fileName.c_str());
    if (!fin)
@@ -183,7 +220,9 @@ int main()
 
 	   graph g;
 	   maze m(fin);
-       m.findPathRecursive(0,0,6, 9);
+       m.mapMazeToGraph(g);
+       //cout << g;
+       //m.findPathRecursive(0,0,6, 9);
    }
    catch (indexRangeError &ex)
    {
