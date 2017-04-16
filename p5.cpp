@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include "d_matrix.h"
 #include "graph.h"
+#include <stack>
 
 using namespace std;
 
@@ -104,9 +105,10 @@ void maze::print(int goalI, int goalJ, int currI, int currJ)
 bool maze::isLegal(int i, int j)
 // Return the value stored at the (i,j) entry in the maze.
 {
-   if (i < 0 || i > rows || j < 0 || j > cols)
-	  throw rangeError("Bad value in maze::isLegal");
-
+   if (i < 0 || i >= rows || j < 0 || j >= cols) {
+       //throw rangeError("Bad value in maze::isLegal");
+       return false;
+   }
    return value[i][j];
 }
 
@@ -116,27 +118,38 @@ void maze::mapMazeToGraph(graph &g)
 }
 
 bool maze::findPathRecursive(int i, int j, int desti, int destj) {
+    stack<string> directions;
     visitedNodes[i][j] = true;
-    if(i == desti && j == destj)
+    if(i == desti && j == destj) {
+        /*while (!directions.empty()) {
+            cout << directions.top();
+            directions.pop();
+        }*/
         return true;
+    }
     //check all four possible directions
     if(isLegal(i+1,j) && !visitedNodes[i+1][j]) {
+        directions.push("down ");
         if(findPathRecursive(i + 1, j, desti, destj))
             return true;
     }
     if(isLegal(i,j+1) && !visitedNodes[i][j+1]) {
+        directions.push("right ");
         if(findPathRecursive(i, j+1, desti, destj))
             return true;
     }
     if(isLegal(i-1,j) && !visitedNodes[i-1][j]) {
+        directions.push("up");
         if(findPathRecursive(i - 1, j, desti, destj))
             return true;
     }
     if(isLegal(i,j-1) && !visitedNodes[i][j-1]) {
+        directions.push("left");
         if(findPathRecursive(i, j-1, desti, destj))
             return true;
     }
     //no path could be found from this node to the destination
+    //directions.pop();
     return false;
 }
 
@@ -161,7 +174,7 @@ int main()
 
 	   graph g;
 	   maze m(fin);
-       //cout << m.findPathRecursive(0,0,6, 9);
+       m.findPathRecursive(0,0,6, 9);
    }
    catch (indexRangeError &ex)
    {
