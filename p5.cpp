@@ -134,17 +134,17 @@ void maze::mapMazeToGraph(graph &g)
         {
             if(isLegal(i,j))
             {
-                int x = getMap(i,j);
-                int y = 0;
+                int a = getMap(i,j);
+                int b = 0;
                 if(isLegal(i+1,j))
                 {
-                    y = getMap(i+1,j);
-                    g.addEdge(x,y,1);
+                    b = getMap(i+1,j);
+                    g.addEdge(a,b,1);
                 }
                 if(isLegal(i,j+1))
                 {
-                    y = getMap(i,j+1);
-                    g.addEdge(x,y,1);
+                    b = getMap(i,j+1);
+                    g.addEdge(a,b,1);
                 }
             }
         }
