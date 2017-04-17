@@ -25,7 +25,6 @@ class maze
 	  void mapMazeToGraph(graph &g);
       bool findPathRecursive(int i, int j, int desti, int destj);
 	  void findPathNonRecursive(int start, int end, graph& g);
-      bool findPathNonRecursive(graph &g, int start, int goal);
 
    private:
 	  int rows; // number of rows in the maze
@@ -244,25 +243,9 @@ void maze::findPathNonRecursive(int start, int end, graph& g)
 bool maze::findPathRecursive(int i, int j, int desti, int destj) {
     visitedNodes[i][j] = true;
     if(i == desti && j == destj) {  //found bottom right corner
-        int cRow = 0;
-        int cCol = 0;
         while (!directions.empty()) {
 			cout << directions.front();
-            /*if(directions.front() == "down "){
-                cCol++;
-            }
-            if(directions.front() == "right "){
-                cRow++;
-            }
-            if(directions.front() == "up "){
-                cCol--;
-            }
-            if(directions.front() == "left "){
-                cRow--;
-            }*/
 			directions.erase(directions.begin());  //print directions
-            //this->print(desti, destj, cRow, cCol);
-            //cout << endl;
         }
 		cout << "Found" << endl;
 
@@ -290,14 +273,14 @@ bool maze::findPathRecursive(int i, int j, int desti, int destj) {
 			directions.pop_back();
     }
     if(isLegal(i-1,j) && !visitedNodes[i-1][j]) {
-        directions.push_back("up ");
+        directions.push_back("up");
         if(findPathRecursive(i - 1, j, desti, destj))
             return true;
 		else if (!directions.empty())
 			directions.pop_back();
     }
     if(isLegal(i,j-1) && !visitedNodes[i][j-1]) {
-        directions.push_back("left ");
+        directions.push_back("left");
         if(findPathRecursive(i, j-1, desti, destj))
             return true;
 		else if(!directions.empty())
@@ -306,89 +289,6 @@ bool maze::findPathRecursive(int i, int j, int desti, int destj) {
     //no path could be found from this node to the destination
     return false;
 }
-
-bool maze::findPathNonRecursive(graph &g, int start, int goal)
-{
-    g.clearVisit();
-    stack<int> s;
-    bool found = false;
-
-    s.push(start);
-    g.visit(start);
-    bool adjacent = false;
-
-    while(!s.empty() && !found)
-    {
-        int a = s.top();
-        if (a == goal)
-            found = true;
-        for(int i = 0; i < rows; i++) // for 1
-        {
-            for(int j = 0; j < cols; j++) // for 2
-            {
-                if(getMap(i,j) == a)
-                {
-                    print(rows-1,cols-1,i,j);
-                    //go right
-                    if(j!= cols-1 && getMap(i,j+1) > -1)
-                    {
-                        if(!g.isVisited(getMap(i,j+1)))
-                        {
-                            //cout << " right";
-                            g.visit(getMap(i,j+1));
-                            s.push(getMap(i,j+1));
-                            adjacent = true;
-                        }
-                    }
-                    if(i != rows-1 && getMap(i+1,j) > -1)
-                    {
-                        //go down
-                        if(!g.isVisited(getMap(i+1,j)))
-                        {
-                            //cout << " down";
-                            g.visit(getMap(i+1,j));
-                            s.push(getMap(i+1,j));
-                            adjacent = true;
-                        }
-                    }
-                    if(i != 0 && getMap(i-1,j) > -1)
-                    {
-                        //go up
-                        if(!g.isVisited(getMap(i-1,j)))
-                        {
-                            //cout << " up";
-                            g.visit(getMap(i-1,j));
-                            s.push(getMap(i-1,j));
-                            adjacent = true;
-                        }
-                    }
-                    if(j != 0 && getMap(i,j-1) > -1)
-                    {
-                        //go left
-                        if(!g.isVisited(getMap(i,j-1)))
-                        {
-                            //cout << " left";
-                            g.visit(getMap(i,j-1));
-                            s.push(getMap(i,j-1));
-                            adjacent = true;
-                        }
-                    }
-                    if(!adjacent)
-                        s.pop();
-                        adjacent = false;
-                    break;
-                }
-            } //end for 2
-        } //end for 1
-    }// end while
-
-    if(found) {
-        return true;
-    }
-    else
-        return false;
-}
-
 
 
 int main()
@@ -414,6 +314,7 @@ int main()
         m.mapMazeToGraph(g);
         //m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
 		m.findPathNonRecursive(m.getMap(0, 0), m.getMap(6, 9), g);
+        m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
     }
     catch (indexRangeError &ex)
     {
@@ -446,6 +347,7 @@ int main()
         m.mapMazeToGraph(g);
         //m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
 		m.findPathNonRecursive(m.getMap(0, 0), m.getMap(6, 9), g);
+        m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
     }
     catch (indexRangeError &ex)
     {
@@ -476,7 +378,8 @@ int main()
 		m.mapMazeToGraph(g);
         m.findPathNonRecursive(m.getMap(0, 0), m.getMap(6, 9), g);
         //m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
-        //m.findPathNonRecursive(g, m.getMap(0,0), m.getMap(m.getRows()-1, m.getCols()-1));
+        m.mapMazeToGraph(g);
+        m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
     }
     catch (indexRangeError &ex)
     {
@@ -486,5 +389,5 @@ int main()
     {
         cout << ex.what() << endl; exit(1);
     }
-    system("pause");
+   system("pause");
 }
