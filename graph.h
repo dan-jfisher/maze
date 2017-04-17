@@ -537,6 +537,7 @@ void graph::addEdge(int i, int j, NodeWeight w)
    if (!isEdge(i,j))
       edges[i][j] = edge(i,j,w);
    NumEdges++;
+   //cout << i << " " << j << endl;
 }
 
 void graph::removeEdge(int i, int j)

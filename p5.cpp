@@ -128,24 +128,26 @@ void maze::mapMazeToGraph(graph &g)
         }
     }
 
-    for(int i = 0; i < rows; i++) {   //add all edges
-        for (int j = 0; j < cols; j++) {
-            if(isLegal(i,j)){
-                if(isLegal(i+1,j)){
-                    g.addEdge(getMap(i,j), getMap(i+1,j));
+    for(int i = 0; i < rows-1; i++)
+    {
+        for(int j = 0; j < cols-1; j++)
+        {
+            if(isLegal(i,j))
+            {
+                int x = getMap(i,j);
+                int y = 0;
+                if(isLegal(i+1,j))
+                {
+                    y = getMap(i+1,j);
+                    g.addEdge(x,y,1);
                 }
-                if(isLegal(i,j+1)){
-                    g.addEdge(getMap(i,j), getMap(i+1,j));
-                }
-                if(isLegal(i-1,j)){
-                    g.addEdge(getMap(i,j), getMap(i+1,j));
-                }
-                if(isLegal(i,j-1)){
-                    g.addEdge(getMap(i,j), getMap(i+1,j));
+                if(isLegal(i,j+1))
+                {
+                    y = getMap(i,j+1);
+                    g.addEdge(x,y,1);
                 }
             }
         }
-
     }
 }
 
@@ -221,7 +223,7 @@ int main()
 	   graph g;
 	   maze m(fin);
        m.mapMazeToGraph(g);
-       //cout << g;
+       cout << g;
        //m.findPathRecursive(0,0,6, 9);
    }
    catch (indexRangeError &ex)
