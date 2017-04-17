@@ -24,6 +24,7 @@ class maze
 	  int getMap(int i, int j) const;
 	  void mapMazeToGraph(graph &g);
       bool findPathRecursive(int i, int j, int desti, int destj);
+	  void maze::findPathNonRecursive(int start, int end, graph& g);
 
    private:
 	  int rows; // number of rows in the maze
@@ -122,7 +123,8 @@ void maze::mapMazeToGraph(graph &g)
     for(int i = 0; i < rows; i++){     //map all nodes
         for(int j = 0; j < cols; j++){
             if(isLegal(i,j)){
-                node n;
+				node n;
+				n.setId(counter);
                 g.addNode(n);
                 setMap(i,j, counter);
                 counter++;
@@ -151,6 +153,91 @@ void maze::mapMazeToGraph(graph &g)
             }
         }
     }
+}
+
+void maze::findPathNonRecursive(int start, int end, graph& g)
+{
+	stack<int> pathStack;
+	bool solved = false;
+	bool path_available = false;
+	g.clearVisit();
+
+	pathStack.push(start);
+	g.visit(start);
+
+	while (!pathStack.empty())
+	{
+		int v = pathStack.top();
+		if (v == end)
+		{
+			solved = true;
+			while (!directions.empty()) {
+				cout << directions.front();
+				directions.erase(directions.begin());  //print directions
+			}
+			break;
+		}
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < cols; j++)
+			{
+				if (map[i][j] == v)
+				{
+					if (isLegal(i, j + 1) && map[i][j + 1])
+					{
+						if (!g.isVisited(map[i][j + 1]))
+						{
+							directions.push_back("right ");
+							pathStack.push(map[i][j + 1]);
+							g.visit(map[i][j + 1]);
+							path_available = true;
+						}
+					}
+					if (isLegal(i + 1, j) && map[i + 1][j])
+					{
+						if (!g.isVisited(map[i + 1][j]))
+						{
+							directions.push_back("down ");
+							pathStack.push(map[i + 1][j]);
+							g.visit(map[i + 1][j]);
+							path_available = true;
+						}
+					}
+					if (isLegal(i - 1, j) && map[i - 1][j])
+					{
+						if (!g.isVisited(map[i - 1][j]))
+						{
+							directions.push_back("up ");
+							pathStack.push(map[i - 1][j]);
+							g.visit(map[i - 1][j]);
+							path_available = true;
+						}
+					}
+					if (isLegal(i, j - 1) && map[i][j - 1])
+					{
+						if (!g.isVisited(map[i][j - 1]))
+						{
+							directions.push_back("left ");
+							pathStack.push(map[i][j - 1]);
+							g.visit(map[i][j - 1]);
+							path_available = true;
+						}
+					}
+					if (!path_available)
+					{
+						pathStack.pop();
+						directions.pop_back();
+					}
+					path_available = false;
+					break;
+				}
+			}
+		}
+	}
+	if (solved)
+		cout << "Solution found" << endl;
+	else
+		cout << "No solution" << endl;
 }
 
 bool maze::findPathRecursive(int i, int j, int desti, int destj) {
@@ -210,7 +297,7 @@ int main()
     ifstream fin;
 
     // Read the maze from the file.
-    string fileName = "Maze 1.txt";
+    string fileName = "maze.txt";
 
     fin.open(fileName.c_str());
     if (!fin)
@@ -240,12 +327,13 @@ int main()
     cout << endl;
 
 
-    fileName = "Maze 2.txt";
+    fileName = "maze.txt";
 
     fin.open(fileName.c_str());
     if (!fin)
     {
         cerr << "Cannot open " << fileName << endl;
+		system("pause");
         exit(1);
     }
 
@@ -269,7 +357,7 @@ int main()
     fin.close();
     cout << endl;
 
-    fileName = "Maze 3.txt";
+    fileName = "maze.txt";
 
     fin.open(fileName.c_str());
     if (!fin)
@@ -284,7 +372,7 @@ int main()
         graph g;
         maze m(fin);
         m.mapMazeToGraph(g);
-        m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
+        m.findPathNonRecursive(m.getMap(0, 0), m.getMap(6, 9), g);
     }
     catch (indexRangeError &ex)
     {

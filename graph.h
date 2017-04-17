@@ -82,7 +82,7 @@ void node::setWeight(NodeWeight w)
 void node::setId(int i)
 // Set node's id to i.  Throws an exception if i < 0.
 {
-   if (i < 0)
+	if (i < 0)
       throw rangeError("Bad value in node::setId");
    
    id = i;
