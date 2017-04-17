@@ -17,6 +17,8 @@ class maze
 	  maze(ifstream &fin);
 	  void print(int,int,int,int);
 	  bool isLegal(int i, int j);
+      int getRows(){return this->rows;}
+      int getCols(){return this->cols;}
 
 	  void setMap(int i, int j, int n);
 	  int getMap(int i, int j) const;
@@ -204,35 +206,93 @@ bool maze::findPathRecursive(int i, int j, int desti, int destj) {
 
 int main()
 {
-   char x;
-   ifstream fin;
+    char x;
+    ifstream fin;
 
-   // Read the maze from the file.
-   string fileName = "Maze 1.txt";
+    // Read the maze from the file.
+    string fileName = "Maze 1.txt";
 
-   fin.open(fileName.c_str());
-   if (!fin)
-   {
-	  cerr << "Cannot open " << fileName << endl;
-	  exit(1);
-   }
+    fin.open(fileName.c_str());
+    if (!fin)
+    {
+	   cerr << "Cannot open " << fileName << endl;
+	   exit(1);
+    }
 
-   try
-   {
+    try
+    {
 
-	   graph g;
-	   maze m(fin);
-       m.mapMazeToGraph(g);
-       cout << g;
-       //m.findPathRecursive(0,0,6, 9);
-   }
-   catch (indexRangeError &ex)
-   {
-	  cout << ex.what() << endl; exit(1);
-   }
-   catch (rangeError &ex)
-   {
-	  cout << ex.what() << endl; exit(1);
-   }
+	    graph g;
+	    maze m(fin);
+        m.mapMazeToGraph(g);
+        m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
+    }
+    catch (indexRangeError &ex)
+    {
+ 	   cout << ex.what() << endl; exit(1);
+    }
+    catch (rangeError &ex)
+    {
+	   cout << ex.what() << endl; exit(1);
+    }
+
+    fin.close();
+    cout << endl;
+
+
+    fileName = "Maze 2.txt";
+
+    fin.open(fileName.c_str());
+    if (!fin)
+    {
+        cerr << "Cannot open " << fileName << endl;
+        exit(1);
+    }
+
+    try
+    {
+
+        graph g;
+        maze m(fin);
+        m.mapMazeToGraph(g);
+        m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
+    }
+    catch (indexRangeError &ex)
+    {
+        cout << ex.what() << endl; exit(1);
+    }
+    catch (rangeError &ex)
+    {
+        cout << ex.what() << endl; exit(1);
+    }
+
+    fin.close();
+    cout << endl;
+
+    fileName = "Maze 3.txt";
+
+    fin.open(fileName.c_str());
+    if (!fin)
+    {
+        cerr << "Cannot open " << fileName << endl;
+        exit(1);
+    }
+
+    try
+    {
+
+        graph g;
+        maze m(fin);
+        m.mapMazeToGraph(g);
+        m.findPathRecursive(0,0,m.getRows()-1, m.getCols()-1);
+    }
+    catch (indexRangeError &ex)
+    {
+        cout << ex.what() << endl; exit(1);
+    }
+    catch (rangeError &ex)
+    {
+        cout << ex.what() << endl; exit(1);
+    }
    system("pause");
 }
