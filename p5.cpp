@@ -228,72 +228,67 @@ bool maze::findPathNonRecursive(graph &g, int start, int goal)
 
     s.push(start);
     g.visit(start);
-    bool adjacent = false;
+    bool deadEnd = true;
 
     while(!s.empty() && !found)
     {
         int a = s.top();
         if (a == goal)
             found = true;
-        for(int i = 0; i < rows; i++) // for 1
+        for(int i = 0; i < rows; i++)
         {
-            for(int j = 0; j < cols; j++) // for 2
+            for(int j = 0; j < cols; j++) 
             {
                 if(getMap(i,j) == a)
                 {
                     print(rows-1,cols-1,i,j);
-                    //go right
+                    //right
                     if(j!= cols-1 && getMap(i,j+1) > -1)
                     {
                         if(!g.isVisited(getMap(i,j+1)))
                         {
-                            //cout << " right";
                             g.visit(getMap(i,j+1));
                             s.push(getMap(i,j+1));
-                            adjacent = true;
+                            deadEnd = false;
                         }
                     }
                     if(i != rows-1 && getMap(i+1,j) > -1)
                     {
-                        //go down
+                        //down
                         if(!g.isVisited(getMap(i+1,j)))
                         {
-                            //cout << " down";
                             g.visit(getMap(i+1,j));
                             s.push(getMap(i+1,j));
-                            adjacent = true;
+                            deadEnd = false;
                         }
                     }
                     if(i != 0 && getMap(i-1,j) > -1)
                     {
-                        //go up
+                        //up
                         if(!g.isVisited(getMap(i-1,j)))
                         {
-                            //cout << " up";
                             g.visit(getMap(i-1,j));
                             s.push(getMap(i-1,j));
-                            adjacent = true;
+                            deadEnd = false;
                         }
                     }
                     if(j != 0 && getMap(i,j-1) > -1)
                     {
-                        //go left
+                        //left
                         if(!g.isVisited(getMap(i,j-1)))
                         {
-                            //cout << " left";
                             g.visit(getMap(i,j-1));
                             s.push(getMap(i,j-1));
-                            adjacent = true;
+                            deadEnd = false;
                         }
                     }
-                    if(!adjacent)
+                    if(deadEnd)
                         s.pop();
-                        adjacent = false;
                     break;
                 }
-            } //end for 2
-        } //end for 1
-    }// end while
+            } 
+        } 
+    }
 
     if(found) {
         return true;
