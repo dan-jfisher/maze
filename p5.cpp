@@ -290,6 +290,57 @@ bool maze::findPathRecursive(int i, int j, int desti, int destj) {
     return false;
 }
 
+static void outputPathDirections(vector<int> nodesVisited, maze m, int index){
+    if(index < nodesVisited.size()){
+        int lastRow, lastCol, currRow, currCol;
+
+        for(int j = 0; j < m.getRows(); j++){
+            for(int k = 0; k < m.getCols(); k++){
+                if(nodesVisited.at(index) == m.getMap(j,k)){
+                    lastRow = j;
+                    lastCol = k;
+                }
+            }
+        }
+
+        int i = index + 1;
+        for(int j = 0; j < m.getRows(); j++){
+            for(int k = 0; k < m.getCols(); k++){
+                if(nodesVisited.at(i) == m.getMap(j,k)){
+                    currRow = j;
+                    currCol = k;
+
+                    if(currRow - lastRow == 0){
+                        if(currCol - lastCol > 0) {
+                            cout << "down ";
+                            outputPathDirections(nodesVisited, m, i);
+                            return;
+                        }
+                        else{
+                            cout << "up ";
+                            outputPathDirections(nodesVisited, m, i);
+                            return;
+                        }
+                    }
+                    else{
+                        if(currRow - lastRow > 0 ){
+                            cout << "right ";
+                            outputPathDirections(nodesVisited, m, i);
+                            return;
+                        }
+                        else{
+                            cout << "left ";
+                            outputPathDirections(nodesVisited, m, i);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return;
+}
+
 
 int main()
 {
@@ -313,6 +364,7 @@ int main()
 	    maze m(fin);
         m.mapMazeToGraph(g);
 		vector<int> nodesVisited = g.shortestPathDijkstra(m.getMap(0,0), m.getMap(m.getRows()-1,m.getCols()-1));
+        outputPathDirections(nodesVisited, m, 0);
 
         /*int lastRow, lastCol, currRow, currCol;
 
