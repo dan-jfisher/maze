@@ -4,6 +4,7 @@
 #include "d_except.h"
 #include <list>
 #include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -14,6 +15,7 @@ int const MaxNumNodex = 9999;
 
 typedef int NodeWeight;
 typedef int EdgeWeight;
+typedef pair<int, int> iPair;
 
 class node
 {
@@ -406,6 +408,8 @@ class graph
    bool isVisited(int i) const;
    void clearVisit();
    bool allNodesVisited();
+
+   vector<int> shortestPathDijkstra(int start, int end);
 
   private:
    matrix<edge> edges;
@@ -889,4 +893,38 @@ bool graph::allNodesMarked()
 	 return false;
 
    return true;
+}
+
+vector<int> graph::shortestPathDijkstra(int start, int end){
+    priority_queue< iPair, vector <iPair> , greater<iPair> > shortestPath;
+
+    matrix<int> paths(numNodes(),0);
+
+    vector<int> dist(numNodes(), 1000);
+
+    dist.at(start) = 0;
+    shortestPath.push(make_pair(start,0));
+    paths[start].push_back(start);
+
+    while(!shortestPath.empty()){
+        int x = shortestPath.top().second;
+        int xDist = dist.at(x);
+        shortestPath.pop();
+
+        for(int i = 0; i < edges[x].size(); i++){
+            if(edges[x][i].isValid()){
+                if(dist.at(i) > (xDist + 1)){
+                    dist.at(i) = xDist + 1;
+                    shortestPath.push(make_pair(dist.at(i),i));
+                    paths[i] = paths[x];
+                    paths[i].push_back(i);
+                }
+            }
+        }
+    }
+
+    cout << endl;
+    for(int i = 0; i < paths[end].size(); i++){
+        cout << " " << paths[end][i];
+    }
 }
