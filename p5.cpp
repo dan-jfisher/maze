@@ -22,6 +22,7 @@ class maze
 
 	  void setMap(int i, int j, int n);
 	  int getMap(int i, int j) const;
+	  void getLocInMap(int& i, int& j, int node_Id);
 	  void mapMazeToGraph(graph &g);
       bool findPathRecursive(int i, int j, int desti, int destj);
 	  void findPathNonRecursive(int start, int end, graph& g);
@@ -46,6 +47,21 @@ int maze ::getMap(int i, int j) const
 // Return mapping of maze cell (i,j) in the graph.
 {
     return map[i][j];
+}
+
+void maze::getLocInMap(int& i, int& j, int node_Id)
+{
+	for (int k = 0; k < map.rows(); k++)
+	{
+		for (int m = 0; m < map.cols(); m++)
+		{
+			if (map[k][m] == node_Id)
+			{
+				i = k;
+				j = m;
+			}
+		}
+	}
 }
 
 maze::maze(ifstream &fin)
@@ -363,8 +379,8 @@ int main()
 	    graph g;
 	    maze m(fin);
         m.mapMazeToGraph(g);
-		vector<int> nodesVisited = g.shortestPathDijkstra(m.getMap(0,0), m.getMap(m.getRows()-1,m.getCols()-1));
-        outputPathDirections(nodesVisited, m, 0);
+		//vector<int> nodesVisited = g.shortestPathDijkstra(m.getMap(0,0), m.getMap(m.getRows()-1,m.getCols()-1));
+        //outputPathDirections(nodesVisited, m, 0);
 
         /*int lastRow, lastCol, currRow, currCol;
 
@@ -411,6 +427,16 @@ int main()
                 }
             }
         }*/
+		bool n = g.findShortestPathBFS(0, 31);
+		int i = 31;
+		int x, y;
+		while (i != 0)
+		{
+			m.getLocInMap(x, y, i);
+			m.print(7, 9, x, y);
+			i = g.getNode(i).getParent();
+		}
+		//vector<int> nodesVisited = g.shortestPathDijkstra(m.getMap(0,0), 31);
     }
     catch (indexRangeError &ex)
     {

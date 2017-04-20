@@ -27,6 +27,9 @@ class node
       void setId(int i);
       int getId() const;
 
+	  void setParent(int i);
+	  int getParent() const;
+
       void setWeight(NodeWeight);
       NodeWeight getWeight() const;
    
@@ -42,6 +45,7 @@ class node
 
    private:
       int id;
+	  int parent_node;
       NodeWeight weight;
       bool marked;
       bool visited;
@@ -73,6 +77,16 @@ NodeWeight node::getWeight() const
 // Return node's weight
 {
    return weight;
+}
+
+void node::setParent(int i)
+{
+	parent_node = i;
+}
+
+int node::getParent() const
+{
+	return parent_node;
 }
 
 void node::setWeight(NodeWeight w)
@@ -410,6 +424,7 @@ class graph
    bool allNodesVisited();
 
    vector<int> shortestPathDijkstra(int start, int end);
+   bool findShortestPathBFS(int start, int end);
 
   private:
    matrix<edge> edges;
@@ -895,7 +910,41 @@ bool graph::allNodesMarked()
    return true;
 }
 
-vector<int> graph::shortestPathDijkstra(int start, int end){
+bool graph::findShortestPathBFS(int start, int end)
+{
+	queue<node> path_queue;
+	node v;
+	for (int i = 0; i < numNodes(); i++)
+	{
+		unVisit(i);
+	}
+	path_queue.push(nodes[start]);
+	nodes[start].visit();
+
+	while (!path_queue.empty())
+	{
+		v = path_queue.front();
+		if (v.getId() == end)
+		{
+			return true;
+		}
+		for (unsigned i = 0; i < edges[v.getId()].size(); i++)
+		{
+			if (edges[v.getId()][i].isValid() && !nodes[i].isVisited())
+			{
+				nodes[i].visit();
+				nodes[i].setParent(v.getId());
+				cout << "Set parent of " << nodes[i].getId() << " to " << nodes[i].getParent() << endl;
+				path_queue.push(nodes[i]);
+
+			}
+		}
+		path_queue.pop();
+	}
+	return false;
+}
+
+/*vector<int> graph::shortestPathDijkstra(int start, int end){
     priority_queue< iPair, vector <iPair> , greater<iPair> > shortestPath;
 
     matrix<int> paths(numNodes(),0);
@@ -927,4 +976,3 @@ vector<int> graph::shortestPathDijkstra(int start, int end){
     /*for(int i = 0; i < paths[end].size(); i++){
         cout << " " << paths[end][i];
     }*/
-}
