@@ -312,7 +312,53 @@ int main()
 	    graph g;
 	    maze m(fin);
         m.mapMazeToGraph(g);
-		vector<int> nodesVisited = g.shortestPathDijkstra(m.getMap(0,0), 31);
+		vector<int> nodesVisited = g.shortestPathDijkstra(m.getMap(0,0), m.getMap(m.getRows()-1,m.getCols()-1));
+
+        /*int lastRow, lastCol, currRow, currCol;
+
+        for(int j = 0; j < m.getRows(); j++){
+            for(int k = 0; k < m.getCols(); k++){
+                if(0 == m.getMap(j,k)){
+                    lastRow = j;
+                    lastCol = k;
+                }
+            }
+        }
+
+        int i = 1;
+        cout << nodesVisited.at(i);
+        for(int j = 0; j < m.getRows(); j++){
+            for(int k = 0; k < m.getCols(); k++){
+                if(nodesVisited.at(i) == m.getMap(j,k)){
+                    currRow = j;
+                    currCol = k;
+
+                    if(currRow - lastRow == 0){
+                        if(currCol - lastCol > 0) {
+                            cout << "down ";
+                            i++;
+                        }
+                        else{
+                            cout << "up ";
+                            i++;
+                        }
+                    }
+                    else{
+                        if(currRow - lastRow > 0 ){
+                            cout << "right ";
+                            i++;
+                        }
+                        else{
+                            cout << "left ";
+                            i++;
+                        }
+                    }
+
+                    lastCol = currCol;
+                    lastRow = currRow;
+                }
+            }
+        }*/
     }
     catch (indexRangeError &ex)
     {
