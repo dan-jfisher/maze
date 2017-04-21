@@ -944,7 +944,7 @@ bool graph::findShortestPathBFS(int start, int end)
 	return false;
 }
 
-/*vector<int> graph::shortestPathDijkstra(int start, int end) {
+vector<int> graph::shortestPathDijkstra(int start, int end) {
     priority_queue<iPair, vector<iPair>, greater<iPair> > shortestPath;
 
     matrix<int> paths(numNodes(), 0);
@@ -954,7 +954,6 @@ bool graph::findShortestPathBFS(int start, int end)
     dist.at(start) = 0;
     shortestPath.push(make_pair(start, 0));
     paths[start].push_back(start);
-    int hops = 0;
 
     while (!shortestPath.empty()) {
         int x = shortestPath.top().second;
@@ -974,9 +973,11 @@ bool graph::findShortestPathBFS(int start, int end)
         }
     }
 
-
-    for(int i = 0; i < paths[end].size(); i++){
+    /*for(int i = 0; i < paths[end].size(); i++){
         cout << " " << paths[end][i];
-    }
-    return paths[end];
-}*/
+    }*/
+    if(paths[end].size() > 0)
+       return paths[end];
+    else
+       return {-1};
+}

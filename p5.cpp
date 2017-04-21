@@ -389,32 +389,27 @@ int main()
 	    graph g;
 	    maze m(fin);
         m.mapMazeToGraph(g);
-		//vector<int> pathDij = g.shortestPathDijkstra(0,m.getMap(m.getRows()-1, m.getCols()-1));
+		vector<int> pathDij = g.shortestPathDijkstra(0,m.getMap(m.getRows()-1, m.getCols()-1));
 		cout << g.numNodes() - 1;
 		bool n = g.findShortestPathBFS(0, g.numNodes()-1);
 		int i = g.numNodes()-1;
         int j = 0;
 		int x, y;
 
-		if (n)
-		{
-			while (i != 0)
-			{
-				m.getLocInMap(x, y, i);
-				m.print(m.getRows()-1, m.getCols()-1, x, y);
-				i = g.getNode(i).getParent();
-				system("pause");
-			}
-		}
-       /* while(j < pathDij.size() && i != 0)
-		{
-			m.getLocInMap(x, y, i);
-			//m.print(7, 9, x, y);
-			i = g.getNode(i).getParent();
-            m.getLocInMap(x,y,pathDij.at(j));
-            m.print(m.getRows()-1,m.getCols()-1,x,y);
-            j++;
-		}*/
+		if (n && pathDij.at(0) != -1) {
+            cout << endl << "Breadth First: " << endl;
+            while (i != 0) {
+                m.getLocInMap(x, y, i);
+                m.print(m.getRows() - 1, m.getCols() - 1, x, y);
+                i = g.getNode(i).getParent();
+            }
+            cout << endl << "Dijkstra's Algorithm: " << endl;
+            while (j < pathDij.size()) {
+                m.getLocInMap(x, y, pathDij.at(j));
+                m.print(m.getRows() - 1, m.getCols() - 1, x, y);
+                j++;
+            }
+        }
     }
     catch (indexRangeError &ex)
     {
