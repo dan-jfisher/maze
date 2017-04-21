@@ -5,6 +5,7 @@
 #include <list>
 #include <stack>
 #include <queue>
+#include <functional>
 
 using namespace std;
 
