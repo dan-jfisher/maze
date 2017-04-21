@@ -944,7 +944,7 @@ bool graph::findShortestPathBFS(int start, int end)
 	return false;
 }
 
-vector<int> graph::shortestPathDijkstra(int start, int end) {
+/*vector<int> graph::shortestPathDijkstra(int start, int end) {
     priority_queue<iPair, vector<iPair>, greater<iPair> > shortestPath;
 
     matrix<int> paths(numNodes(), 0);
@@ -979,4 +979,4 @@ vector<int> graph::shortestPathDijkstra(int start, int end) {
         cout << " " << paths[end][i];
     }
     return paths[end];
-}
+}*/
