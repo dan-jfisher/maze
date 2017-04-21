@@ -379,64 +379,21 @@ int main()
 	    graph g;
 	    maze m(fin);
         m.mapMazeToGraph(g);
-		//vector<int> nodesVisited = g.shortestPathDijkstra(m.getMap(0,0), m.getMap(m.getRows()-1,m.getCols()-1));
-        //outputPathDirections(nodesVisited, m, 0);
-
-        /*int lastRow, lastCol, currRow, currCol;
-
-        for(int j = 0; j < m.getRows(); j++){
-            for(int k = 0; k < m.getCols(); k++){
-                if(0 == m.getMap(j,k)){
-                    lastRow = j;
-                    lastCol = k;
-                }
-            }
-        }
-
-        int i = 1;
-        cout << nodesVisited.at(i);
-        for(int j = 0; j < m.getRows(); j++){
-            for(int k = 0; k < m.getCols(); k++){
-                if(nodesVisited.at(i) == m.getMap(j,k)){
-                    currRow = j;
-                    currCol = k;
-
-                    if(currRow - lastRow == 0){
-                        if(currCol - lastCol > 0) {
-                            cout << "down ";
-                            i++;
-                        }
-                        else{
-                            cout << "up ";
-                            i++;
-                        }
-                    }
-                    else{
-                        if(currRow - lastRow > 0 ){
-                            cout << "right ";
-                            i++;
-                        }
-                        else{
-                            cout << "left ";
-                            i++;
-                        }
-                    }
-
-                    lastCol = currCol;
-                    lastRow = currRow;
-                }
-            }
-        }*/
+		vector<int> pathDij = g.shortestPathDijkstra(0,m.getMap(m.getRows()-1, m.getCols()-1));
 		bool n = g.findShortestPathBFS(0, 31);
 		int i = 31;
+        int j = 0;
 		int x, y;
-		while (i != 0)
+
+        while(j < pathDij.size() && i != 0)
 		{
 			m.getLocInMap(x, y, i);
-			m.print(7, 9, x, y);
+			//m.print(7, 9, x, y);
 			i = g.getNode(i).getParent();
+            m.getLocInMap(x,y,pathDij.at(j));
+            m.print(m.getRows()-1,m.getCols()-1,x,y);
+            j++;
 		}
-		//vector<int> nodesVisited = g.shortestPathDijkstra(m.getMap(0,0), 31);
     }
     catch (indexRangeError &ex)
     {

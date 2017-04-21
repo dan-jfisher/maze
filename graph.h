@@ -934,7 +934,7 @@ bool graph::findShortestPathBFS(int start, int end)
 			{
 				nodes[i].visit();
 				nodes[i].setParent(v.getId());
-				cout << "Set parent of " << nodes[i].getId() << " to " << nodes[i].getParent() << endl;
+				//cout << "Set parent of " << nodes[i].getId() << " to " << nodes[i].getParent() << endl;
 				path_queue.push(nodes[i]);
 
 			}
@@ -944,27 +944,29 @@ bool graph::findShortestPathBFS(int start, int end)
 	return false;
 }
 
-/*vector<int> graph::shortestPathDijkstra(int start, int end){
-    priority_queue< iPair, vector <iPair> , greater<iPair> > shortestPath;
+vector<int> graph::shortestPathDijkstra(int start, int end) {
+    priority_queue<iPair, vector<iPair>, greater<iPair> > shortestPath;
 
-    matrix<int> paths(numNodes(),0);
+    matrix<int> paths(numNodes(), 0);
 
     vector<int> dist(numNodes(), 1000);
 
     dist.at(start) = 0;
-    shortestPath.push(make_pair(start,0));
+    shortestPath.push(make_pair(start, 0));
     paths[start].push_back(start);
+    int hops = 0;
 
-    while(!shortestPath.empty()){
+    while (!shortestPath.empty()) {
         int x = shortestPath.top().second;
         int xDist = dist.at(x);
         shortestPath.pop();
 
-        for(int i = 0; i < edges[x].size(); i++){
-            if(edges[x][i].isValid()){
-                if(dist.at(i) > (xDist + 1)){
+
+        for (int i = 0; i < edges[x].size(); i++) {
+            if (edges[x][i].isValid()) {
+                if (dist.at(i) > (xDist + 1)) {
                     dist.at(i) = xDist + 1;
-                    shortestPath.push(make_pair(dist.at(i),i));
+                    shortestPath.push(make_pair(dist.at(i), i));
                     paths[i] = paths[x];
                     paths[i].push_back(i);
                 }
@@ -972,7 +974,9 @@ bool graph::findShortestPathBFS(int start, int end)
         }
     }
 
-    cout << endl;
-    /*for(int i = 0; i < paths[end].size(); i++){
+
+    for(int i = 0; i < paths[end].size(); i++){
         cout << " " << paths[end][i];
-    }*/
+    }
+    return paths[end];
+}
