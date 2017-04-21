@@ -373,37 +373,28 @@ int main()
 	   exit(1);
     }
 
-	try
-	{
+    try
+    {
 
-		graph g;
-		maze m(fin);
-		m.mapMazeToGraph(g);
-		vector<int> pathDij = g.shortestPathDijkstra(0, m.getMap(m.getRows() - 1, m.getCols() - 1));
+	    graph g;
+	    maze m(fin);
+        m.mapMazeToGraph(g);
+		vector<int> pathDij = g.shortestPathDijkstra(0,m.getMap(m.getRows()-1, m.getCols()-1));
 		bool n = g.findShortestPathBFS(0, 31);
 		int i = 31;
-		int j = 0;
+        int j = 0;
 		int x, y;
 
-		while (j < pathDij.size() && i != 0)
+        while(j < pathDij.size() && i != 0)
 		{
 			m.getLocInMap(x, y, i);
 			//m.print(7, 9, x, y);
 			i = g.getNode(i).getParent();
-			m.getLocInMap(x, y, pathDij.at(j));
-			m.print(m.getRows() - 1, m.getCols() - 1, x, y);
-			j++;
-			if (n)
-			{
-				while (i != 0)
-				{
-					m.getLocInMap(x, y, i);
-					m.print(7, 9, x, y);
-					i = g.getNode(i).getParent();
-				}
-			}
+            m.getLocInMap(x,y,pathDij.at(j));
+            m.print(m.getRows()-1,m.getCols()-1,x,y);
+            j++;
 		}
-	}
+    }
     catch (indexRangeError &ex)
     {
  	   cout << ex.what() << endl; exit(1);
